@@ -208,4 +208,12 @@ class BringFromCircleLineView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+        fun create(activity : Activity) : BringFromCircleLineView {
+            val view : BringFromCircleLineView = BringFromCircleLineView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
