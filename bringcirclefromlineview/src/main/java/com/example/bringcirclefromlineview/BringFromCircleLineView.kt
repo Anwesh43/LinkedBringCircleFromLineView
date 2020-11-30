@@ -76,9 +76,12 @@ class BringFromCircleLineView(ctx : Context) : View(ctx) {
     data class State(var scale : Float = 0f, var dir : Float = 0f, var prevScale : Float = 0f) {
 
         fun update(cb : (Float) -> Unit) {
-            if (dir == 0f) {
-                dir = 1f - 2 * prevScale
-                cb()
+            scale += dir * scGap
+            if (Math.abs(scale - prevScale) > 1) {
+                scale = prevScale + dir
+                dir = 0f
+                prevScale = scale
+                cb(prevScale)
             }
         }
 
@@ -86,6 +89,34 @@ class BringFromCircleLineView(ctx : Context) : View(ctx) {
             if (dir == 0f) {
                 dir = 1f - 2 * prevScale
                 cb()
+            }
+        }
+    }
+
+    data class Animator(var view : View, var animated : Boolean = false) {
+
+        fun animate(cb : () -> Unit) {
+            if (animated) {
+                cb()
+                try {
+                    Thread.sleep(delay)
+                    view.invalidate()
+                } catch(ex : Exception) {
+
+                }
+            }
+        }
+
+        fun start() {
+            if (!animated) {
+                animated = true
+                view.postInvalidate()
+            }
+        }
+
+        fun stop() {
+            if (animated) {
+                animated = false
             }
         }
     }
