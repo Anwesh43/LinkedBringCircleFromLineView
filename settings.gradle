@@ -1,0 +1,3 @@
+include ':bringcirclefromlineview'
+include ':app'
+rootProject.name = "LinkedBringCircleFromLineView"
