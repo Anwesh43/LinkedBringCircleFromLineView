@@ -164,13 +164,13 @@ class BringFromCircleLineView(ctx : Context) : View(ctx) {
 
     data class BringFromCircleLine(var i : Int) {
 
-        private var curr : BFCLNode = BFCLNode(0)
-        private var dir : Int = 1
-        fun draw(canvas : Canvas, paint : Paint) {
+        private var curr: BFCLNode = BFCLNode(0)
+        private var dir: Int = 1
+        fun draw(canvas: Canvas, paint: Paint) {
             curr.draw(canvas, paint)
         }
 
-        fun update(cb : (Float) -> Unit) {
+        fun update(cb: (Float) -> Unit) {
             curr.update {
                 curr = curr.getNext(dir) {
                     dir *= -1
@@ -179,8 +179,31 @@ class BringFromCircleLineView(ctx : Context) : View(ctx) {
             }
         }
 
-        fun startUpdating(cb : () -> Unit) {
+        fun startUpdating(cb: () -> Unit) {
             curr.startUpdating(cb)
+        }
+    }
+
+    data class Renderer(var view : BringFromCircleLineView) {
+
+        private val animator : Animator = Animator(view)
+        private val bfcl : BringFromCircleLine = BringFromCircleLine(0)
+        private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+        fun render(canvas : Canvas) {
+            canvas.drawColor(backColor)
+            bfcl.draw(canvas, paint)
+            animator.animate {
+                bfcl.update {
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            bfcl.startUpdating {
+                animator.start()
+            }
         }
     }
 }
