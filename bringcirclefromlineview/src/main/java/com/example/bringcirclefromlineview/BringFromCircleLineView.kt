@@ -45,7 +45,7 @@ fun Canvas.drawBringFromCircleLine(scale : Float, w : Float, h : Float, paint : 
         drawLine(0f, 0f, size * sf1, 0f, paint)
         restore()
     }
-    drawArc(RectF(-size, -size, size, size), deg * (1 - sf3), deg * sf3, true, paint)
+    drawArc(RectF(-size, -size, size, size), 0f, deg * sf3, true, paint)
     restore()
 }
 
@@ -78,7 +78,7 @@ class BringFromCircleLineView(ctx : Context) : View(ctx) {
     data class State(var scale : Float = 0f, var dir : Float = 0f, var prevScale : Float = 0f) {
 
         fun update(cb : (Float) -> Unit) {
-            scale += dir * scGap
+            scale += (dir * scGap)
             if (Math.abs(scale - prevScale) > 1) {
                 scale = prevScale + dir
                 dir = 0f
